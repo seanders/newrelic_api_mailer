@@ -8,16 +8,19 @@ Bundler.require(*Rails.groups)
 
 module APIMailer
   class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
+    EMAIL_CONFIG = YAML.load_file("#{APIMailer::Application.root}/config/secrets.yml")
+    ENV['MANDRILL_USERNAME'] ||= EMAIL_CONFIG['MANDRILL_USERNAME']
+    ENV['MANDRILL_PASSWORD'] ||= EMAIL_CONFIG['MANDRILL_PASSWORD']
 
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
+    config.action_mailer.smtp_settings = {
+      :address              => "smtp.mandrillapp.com",
+      :port                 => 587,
+      :domain               => 'seanders.me',
+      :user_name            => ENV['MANDRILL_USERNAME'],
+      :password             => ENV['MANDRILL_PASSWORD'],
+      :authentication       => 'plain',
+      :enable_starttls_auto => true
+    }
   end
 end
