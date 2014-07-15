@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ApplicationController do
   describe '#not_found' do
     it 'should return 404 when submitting a bad route' do
-      post(:not_found)
+      post(:not_found, {path: 'dontmatter'})
       expect(response.status).to eq(404)
     end
   end
