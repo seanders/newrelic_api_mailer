@@ -6,4 +6,5 @@ gem 'pg'
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'pry'
 end

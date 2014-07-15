@@ -12,9 +12,22 @@ describe MailController do
       end
 
       it 'should return 200 if succesfully created an email' do
-        Mailer.stub(:forward, true)
+        Mailer.stub(forward: double(deliver: true))
         post(:create, params)
         expect(response.status).to eq(200)
+      end
+    end
+
+    context 'with invalid parameters' do
+      let (:params) do
+        {
+          subject: "hi"
+        }
+      end
+
+      it 'should return 422 if params does not have a `to` params' do
+        post(:create, params)
+        expect(response.status).to eq (422)
       end
     end
   end
