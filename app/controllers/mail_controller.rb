@@ -1,9 +1,7 @@
 class MailController < ApplicationController
 
-  before_filter :mail_params
-
   def create
-    mail = Mailer.forward(params)
+    mail = Mailer.forward(mail_params)
     mail.deliver
     render nothing: true
   end
